@@ -1,29 +1,20 @@
 import csv
-import io
 from pathlib import Path
-from zipfile import ZipFile
 
 import numpy as np
 
 
 def cargar_datos(carpeta):
-    """Lee day.csv o el ZIP, siempre desde la carpeta de este programa."""
-    archivo_csv = carpeta / "day.csv"
-    archivo_zip = carpeta / "bike+sharing+dataset.zip"
-    if archivo_csv.is_file():
-        with archivo_csv.open(encoding="utf-8-sig", newline="") as archivo:
-            filas = list(csv.DictReader(archivo))
-        fuente = "day.csv"
-    elif archivo_zip.is_file():
-        with ZipFile(archivo_zip) as comprimido:
-            with comprimido.open("day.csv") as archivo:
-                with io.TextIOWrapper(archivo, encoding="utf-8-sig", newline="") as texto:
-                    filas = list(csv.DictReader(texto))
-        fuente = "day.csv dentro de bike+sharing+dataset.zip"
-    else:
+    """Lee los datos diarios del dataset descomprimido junto al programa."""
+    archivo_csv = carpeta / "bike+sharing+dataset" / "day.csv"
+    if not archivo_csv.is_file():
         raise FileNotFoundError(
-            "Colocá day.csv o bike+sharing+dataset.zip junto a EjercicioA2.py."
+            f"No se encontró {archivo_csv}. Descomprimí el dataset en "
+            "bike+sharing+dataset junto a EjercicioA2.py."
         )
+    with archivo_csv.open(encoding="utf-8-sig", newline="") as archivo:
+        filas = list(csv.DictReader(archivo))
+    fuente = archivo_csv.relative_to(carpeta).as_posix()
 
     x = np.array([float(fila["temp"]) for fila in filas])
     y = np.array([float(fila["cnt"]) for fila in filas])

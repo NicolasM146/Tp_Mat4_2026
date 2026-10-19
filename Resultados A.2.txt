@@ -1,6 +1,6 @@
 ﻿RESULTADOS A.2
 ==============
-Fuente: day.csv dentro de bike+sharing+dataset.zip | n = 731
+Fuente: bike+sharing+dataset/day.csv | n = 731
 x = temp (normalizada); y = cnt (alquileres diarios).
 
 RECTA FINAL
