@@ -11,7 +11,3 @@ print("Cuadrático:", b0, b1, b2)
 
 # 2) rango observado
 print("rango temp:", x.min(), x.max(), "->", x.min() * 41, x.max() * 41, "°C")
-
-# 3) Ajuste lineal por mínimos cuadrados
-b1, b0 = np.polyfit(x, y, 1)
-print("lineal:", b0, b1)
