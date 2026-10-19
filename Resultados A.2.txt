@@ -1,0 +1,51 @@
+﻿RESULTADOS A.2
+==============
+Fuente: day.csv dentro de bike+sharing+dataset.zip | n = 731
+x = temp (normalizada); y = cnt (alquileres diarios).
+
+RECTA FINAL
+  cnt_estimado = 1214,6421 + 6640,7100*temp
+
+COEFICIENTES Y COMPROBACIÓN
+  Método              b0 (ordenada)      b1 (pendiente)
+  Fórmulas            1214,64211903      6640,70999855
+  NumPy polyfit       1214,64211903      6640,70999855
+  Diferencia absoluta 6.82e-13            9.09e-13
+  Resultado: COINCIDEN (tolerancia absoluta: 1e-8).
+
+VALORES CALCULADOS
+  Media de x = 0,49538479
+  Media de y = 4504,34883721
+  Sxx        = 24,46059704
+  Sxy        = 162435,73133073
+
+  b1 = Sxy/Sxx = 162435,73133073/24,46059704 = 6640,70999855
+  b0 = media_y - b1*media_x = 1214,64211903
+
+DERIVADAS PARCIALES
+  sum indica suma de i=1 a n; df/db0 y df/db1 son parciales.
+  f(b0,b1) = sum [yi - b0 - b1*xi]^2
+
+  df/db0 = sum 2*(yi-b0-b1*xi)*(-1)
+         = -2*(sum yi - n*b0 - b1*sum xi)
+  df/db1 = sum 2*(yi-b0-b1*xi)*(-xi)
+         = -2*(sum xi*yi - b0*sum xi - b1*sum xi^2)
+
+ECUACIONES NORMALES (derivadas = 0)
+  n*b0 + (sum xi)*b1 = sum yi
+  (sum xi)*b0 + (sum xi^2)*b1 = sum xi*yi
+
+  Con los datos:
+  731*b0 + 362,12628040*b1 = 3292679
+  362,12628040*b0 + 203,85244787*b1 = 1793578,82137340
+
+DESPEJE
+  b0 = (sum yi)/n - b1*(sum xi)/n = media_y - b1*media_x
+  (media_y - b1*media_x)*sum xi + b1*sum xi^2 = sum xi*yi
+  b1*(sum xi^2 - n*media_x^2) = sum xi*yi - n*media_x*media_y
+
+  Sxx = sum (xi-media_x)^2 = sum xi^2 - n*media_x^2
+  Sxy = sum (xi-media_x)*(yi-media_y) = sum xi*yi - n*media_x*media_y
+  b1 = Sxy/Sxx; b0 = media_y - b1*media_x.
+
+Valores mostrados redondeados; cálculos con precisión completa.
