@@ -1,0 +1,53 @@
+﻿RESULTADOS A.3
+==============
+Fuente: bike+sharing+dataset/day.csv | n = 731 días.
+Variables: temp, atemp, hum, windspeed (escala original normalizada).
+
+MODELO OBTENIDO POR DESCENSO DEL GRADIENTE
+  cnt_estimado = 3860,3685 + 2111,8137*temp
+                + 5139,1524*atemp -3149,1098*hum
+                -4528,6748*windspeed
+
+COMPARACIÓN CON LA SOLUCIÓN DE MÍNIMOS CUADRADOS (B.5)
+  Parámetro            Gradiente    Mínimos cuadrados    Diferencia
+  b0                3860,368454          3860,368453      9.08e-07
+  b1 temp           2111,813658          2111,813639      1.93e-05
+  b2 atemp          5139,152421          5139,152443      2.19e-05
+  b3 hum           -3149,109751         -3149,109752      1.80e-07
+  b4 windspeed     -4528,674830         -4528,674829      1.20e-06
+  Mayor diferencia absoluta: 2.187e-05.
+  f mínimo cuadrados = 1468850901,456856
+  f gradiente        = 1468850901,456856
+
+TRES TASAS DE APRENDIZAJE (mismo inicio: b = [0, 0, 0, 0, 0])
+  Tasa      Alpha       Iteraciones             f final  Resultado
+  Pequeña   1e-08        150000        2153295558,71  Máximo de iteraciones
+  Adecuada  0.0005       105946        1468850901,46  Convergió
+  Grande    0.001             4     1761985967141,83  Divergió
+  f inicial = 17570910217,00
+
+  Pequeña: el error baja lentamente; no converge en 150000 pasos.
+  Adecuada: el error desciende hasta el mínimo y alcanza la tolerancia.
+  Grande: el error crece; los pasos excesivos provocan divergencia.
+  Para esta función cuadrática, la estabilidad exige 0 < alpha < 0.0007118588.
+
+FUNCIÓN, GRADIENTE Y ACTUALIZACIÓN
+  X: columnas [1, temp, atemp, hum, windspeed]; y = cnt.
+  f(b) = sum (yi - Xi*b)^2 = ||X*b - y||^2
+  grad f(b) = 2*X^T*(X*b - y)
+  b(k+1) = b(k) - alpha*grad f(b(k))
+  Referencia: (X^T*X)*b = X^T*y, resuelta con numpy.linalg.solve.
+
+POR QUÉ SE RESTA EL GRADIENTE (2 líneas)
+  El gradiente apunta hacia el mayor crecimiento local de f.
+  En sentido opuesto, la derivada direccional es -||grad f|| < 0 fuera del mínimo.
+
+CRITERIO DE PARADA
+  Convergencia: norma euclídea del gradiente <= 1e-05.
+  Norma final con tasa adecuada: 9.999e-06.
+  Límite: 150000 iteraciones; alcanzarlo no significa convergencia.
+  Divergencia: detener si f > 100*f_inicial o deja de ser finito.
+
+GRÁFICO
+  Grafico A.3.png: las tres curvas f contra iteración en los mismos ejes.
+  Las escalas indicadas permiten ver la divergencia y la convergencia juntas.
