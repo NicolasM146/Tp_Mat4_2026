@@ -1,0 +1,46 @@
+﻿RESULTADOS B.1 · VARIANZA
+========================
+Fuente: bike+sharing+dataset/day.csv | n = 731 días.
+Modelo simple: cnt en función de temp (cnt = b0 + b1 * temp)
+
+RECTA DE REGRESIÓN AJUSTADA
+  b0 (intercepto) = 1214,6421
+  b1 (pendiente)  = 6640,7100
+  Ecuación: cnt_estimado = 1214,64 + 6640,71 * temp
+
+DESCOMPOSICIÓN DE LA VARIABILIDAD (TABLA ANOVA)
+  Fuente de Variación     Suma Cuadrados (SC)      gl       Cuadrado Medio (CM)
+  -----------------------------------------------------------------------------
+  Regresión (Explicada)         1078688585,17       1         1078688585,17
+  Error (No explicada)          1660846806,88     729            2278253,51
+  -----------------------------------------------------------------------------
+  Total                         2739535392,05     730
+
+VERIFICACIÓN NUMÉRICA
+  SCR + SCE = 1078688585,17 + 1660846806,88
+            = 2739535392,05
+  STC       = 2739535392,05
+  ¿Coinciden exactamente?: Sí
+
+ESTIMACIÓN DE LA VARIANZA DEL MODELO (sigma^2)
+  gl = n - 2 = 731 - 2 = 729
+  sigma^2 = SCE / (n - 2) = 2278253,5074 (bicicletas)^2
+  Desvío estándar residual (sigma) = 1509,39 bicicletas
+
+COEFICIENTE DE DETERMINACIÓN (R^2)
+  R^2 = 1 - (SCE / STC) = 0,3937 (39,37%)
+
+INTERPRETACIÓN DE R^2
+  - Proporción explicada: El 39,37% de la variabilidad total observada en la
+    cantidad diaria de alquileres de bicicletas (cnt) es explicada linealmente por la
+    temperatura (temp). El 60,63% restante corresponde a variabilidad
+    no explicada (otros factores como lluvia, humedad, si es laboral/feriado o azar).
+
+  - Qué NO significa:
+    1. No implica Causalidad: Una asociación estadística del 39,37% no prueba
+       que la temperatura sea la causa directa del alquiler. Si fuera causa-efecto pura, a mayor
+       temperatura siempre habría más alquileres, lo cual no ocurre con calor extremo.
+    2. No demuestra linealidad óptima: Mide la fuerza de una relación lineal, pero no descarta
+       que una estructura no lineal (ej. cuadrática) ajuste mejor al fenómeno.
+    3. No indica que el modelo sea inadecuado: Explicar casi un 40% de la demanda urbana con una sola
+       variable representa un nivel de explicación significativo.
