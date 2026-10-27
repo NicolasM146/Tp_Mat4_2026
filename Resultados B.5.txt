@@ -1,0 +1,66 @@
+﻿RESULTADOS B.5 - REGRESIÓN MÚLTIPLE
+==================================
+Fuente: bike+sharing+dataset/day.csv | n = 731 días.
+Respuesta: cnt. Predictores: temp, atemp, hum y windspeed normalizados.
+
+COEFICIENTES: FÓRMULAS Y HERRAMIENTA, COMO EN B.2
+  Parámetro                 Fórmulas      statsmodels     Diferencia
+  b0 (intercepto)        3860,368453      3860,368453       9.55e-11
+  b1 (temp)              2111,813639      2111,813639       1.88e-09
+  b2 (atemp)             5139,152443      5139,152443       2.11e-09
+  b3 (hum)              -3149,109752     -3149,109752       1.82e-12
+  b4 (windspeed)        -4528,674829     -4528,674829       1.39e-10
+  ¿Coinciden las dos vías? Sí (diferencia absoluta menor que 1e-6).
+
+MODELO FINAL
+  cnt_estimado = 3860,3685 + 2111,8136*temp
+                + 5139,1524*atemp -3149,1098*hum
+                -4528,6748*windspeed
+
+COMPARACIÓN CON EL MEJOR MODELO SIMPLE DEL B.2
+  Modelo                          R2    R2 aj. consigna     R2 aj. habitual
+  Simple (atemp)            0,398244            0,397418            0,397418
+  Múltiple                  0,463832            0,463094            0,460878
+  Mejor simple: atemp, elegido por el mayor R2 entre las cuatro variables.
+  Recta simple: cnt_estimado = 945,8240 + 7501,8339*atemp
+
+  El modelo múltiple explica el 46,38% de la variabilidad observada,
+  frente al 39,82% del modelo simple. También supera su R2 ajustado.
+  La comparación describe el ajuste a estos datos; no evalúa predicciones futuras.
+
+FÓRMULAS DE R2 AJUSTADO
+  Consigna: R2_aj = 1 - (1-R2)*(n-k)/(n-k-1).
+  Habitual: R2_aj = 1 - (1-R2)*(n-1)/(n-k-1).
+  k = número de predictores: 4 en el múltiple y 1 en el simple.
+  El PDF usa n-k donde la fórmula habitual usa n-1; se informan ambas.
+  Para seguir literalmente la consigna, usar la columna "R2 aj. consigna".
+
+RESOLUCIÓN MATRICIAL
+  X tiene columnas [1, temp, atemp, hum, windspeed] y dimensión 731 x 5.
+  Se resuelve (X^T*X)*b = X^T*y con numpy.linalg.solve.
+  Equivale a b = (X^T*X)^(-1)*X^T*y, sin calcular la inversa explícitamente.
+
+  X^T*X =
+  [   731,000000     362,126280     346,752766     458,990560     139,245421]
+  [   362,126280     203,852448     193,371389     229,793352      67,344422]
+  [   346,752766     193,371389     183,869690     220,095905      64,358566]
+  [   458,990560     229,793352     220,095905     303,006262      85,429121]
+  [   139,245421      67,344422      64,358566      85,429121      30,908654]
+  X^T*y =
+  [      3292679,000000]
+  [      1793578,821373]
+  [      1707326,962662]
+  [      2047179,133846]
+  [       601505,053933]
+
+VERIFICACIÓN
+  Mayor diferencia de coeficientes frente a statsmodels: 2.11e-09.
+  SCR múltiple = 1270684490,589651
+  SCE múltiple = 1468850901,456856
+  STC = 2739535392,046512
+  SCR + SCE = 2739535392,046506
+  R2 = 1 - SCE/STC = 0,463832
+  R2 de statsmodels = 0,463832
+  R2 ajustado estándar: fórmulas = 0,460878; statsmodels = 0,460878.
+  El R2 ajustado literal de la consigna se calcula aparte: 0,463094.
+  Cálculos sin redondeo intermedio; valores mostrados redondeados.
