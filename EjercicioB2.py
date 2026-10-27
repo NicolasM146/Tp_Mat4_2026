@@ -116,7 +116,7 @@ def graficar(df, nombre, b0, b1, r2, carpeta):
     plt.grid(True, linestyle="--", alpha=0.5)
     plt.legend(loc="lower right")
 
-    archivo = carpeta / f"dispersion_{nombre}.png"
+    archivo = carpeta / "Grafico B.2.png"
     plt.savefig(archivo, dpi=200, bbox_inches="tight")
     print(f"Gráfico guardado en {archivo}")
     plt.show()
