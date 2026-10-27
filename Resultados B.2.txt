@@ -1,0 +1,44 @@
+﻿RESULTADOS B.2
+==============
+Fuente: day.csv | n = 731 días.
+x* = 0.65 (escala normalizada), intervalos al 95 %.
+
+--- temp ---
+Rango observado: [0.0591; 0.8617]
+Sxx = 24.4606   Sxy = 162435.73   SCE = 1660846806.88   Syy = 2739535392.05
+Fórmulas:    b0 = 1214.6421   b1 = 6640.7100
+statsmodels: b0 = 1214.6421   b1 = 6640.7100
+¿Coinciden las dos vías? True
+
+--- atemp ---
+Rango observado: [0.0791; 0.8409]
+Sxx = 19.3861   Sxy = 145431.55   SCE = 1648532085.32   Syy = 2739535392.05
+Fórmulas:    b0 = 945.8240   b1 = 7501.8339
+statsmodels: b0 = 945.8240   b1 = 7501.8339
+¿Coinciden las dos vías? True
+
+--- hum ---
+Rango observado: [0.0000; 0.9725]
+Sxx = 14.8088   Sxy = -20274.46   SCE = 2711778019.12   Syy = 2739535392.05
+Fórmulas:    b0 = 5363.9865   b1 = -1369.0807
+statsmodels: b0 = 5363.9865   b1 = -1369.0807
+¿Coinciden las dos vías? True
+
+--- windspeed ---
+Rango observado: [0.0224; 0.5075]   <-- x* queda FUERA (extrapolación)
+Sxx = 4.3843   Sxy = -25704.89   SCE = 2588829835.83   Syy = 2739535392.05
+Fórmulas:    b0 = 5621.1529   b1 = -5862.9128
+statsmodels: b0 = 5621.1529   b1 = -5862.9128
+¿Coinciden las dos vías? True
+
+=== Cuadro de B.2 ===
+                  b0         b1      sigma2      R2       r                IC(b1)              IC(b0)           ICM(Y|x*)             IP(Y|x*) x* en rango
+Xi                                                                                                                                                        
+temp       1214.6421  6640.7100  2278253.51  0.3937  0.6275    [6041.56; 7239.86]   [898.24; 1531.04]  [5387.60; 5674.61]   [2564.36; 8497.84]          sí
+atemp       945.8240  7501.8339  2261360.89  0.3982  0.6311    [6831.32; 8172.35]   [609.54; 1282.11]  [5661.41; 5982.62]   [2865.39; 8778.64]          sí
+hum        5363.9865 -1369.0807  3719860.11  0.0101 -0.1007   [-2353.03; -385.13]  [4730.50; 5997.48]  [4332.36; 4615.81]    [684.98; 8263.19]          sí
+windspeed  5621.1529 -5862.9128  3551206.91  0.0550 -0.2345  [-7629.79; -4096.03]  [5257.83; 5984.47]   [986.90; 2633.61]  [-1979.88; 5600.40]          no
+
+Variable elegida: atemp
+  R2 = 0.3982   sigma2 = 2261360.89   |r| = 0.6311
+  Ranking por R2: atemp (0.3982), temp (0.3937), windspeed (0.0550), hum (0.0101)

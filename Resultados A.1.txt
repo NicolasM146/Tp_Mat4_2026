@@ -1,0 +1,27 @@
+﻿RESULTADOS A.1
+==============
+Fuente: day.csv | n = 731 días.
+Rango observado de temp: [0.0591; 0.8617] -> [2.42 °C; 35.33 °C]
+
+MODELO AJUSTADO
+  polyfit:            b0 = -1901.9557   b1 = 21406.9313   b2 = -15055.0254
+  ecuaciones normales: b0 = -1901.9557   b1 = 21406.9313   b2 = -15055.0254
+  ¿Coinciden? True
+  ŷ(x) = -1901.9557 + 21406.9313·x + (-15055.0254)·x²
+
+DERIVADA
+  dŷ/dx = b1 + 2·b2·x = 21406.9313 + (-30110.0508)·x
+  Unidades: alquileres/día por unidad de temp; dividir por 41 para obtener alquileres/día por °C.
+
+  x = 0.25 (10.25 °C, dentro del rango observado)
+    dŷ/dx = 21406.9313 + (-30110.0508)·0.25 = 13879.4186
+    por °C: 13879.4186 / 41 = 338.5224
+  x = 0.8 (32.80 °C, dentro del rango observado)
+    dŷ/dx = 21406.9313 + (-30110.0508)·0.8 = -2681.1093
+    por °C: -2681.1093 / 41 = -65.3929
+
+PUNTO CRÍTICO
+  x* = -b1 / (2·b2) = 0.710956  ->  29.1492 °C
+  d²ŷ/dx² = 2·b2 = -30110.0508  ->  máximo
+  ¿Dentro del rango observado? True ([2.42; 35.33] °C)
+  Demanda esperada en x*: ŷ(x*) = 5707.74 alquileres/día
