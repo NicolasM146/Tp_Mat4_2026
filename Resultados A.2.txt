@@ -10,7 +10,7 @@ COEFICIENTES Y COMPROBACIÓN
   Método              b0 (ordenada)      b1 (pendiente)
   Fórmulas            1214,64211903      6640,70999855
   NumPy polyfit       1214,64211903      6640,70999855
-  Diferencia absoluta 6.82e-13            9.09e-13
+  Diferencia absoluta 9.09e-13            3.64e-12
   Resultado: COINCIDEN (tolerancia absoluta: 1e-8).
 
 VALORES CALCULADOS

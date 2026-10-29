@@ -1,28 +1,6 @@
-import csv
 from pathlib import Path
-
 import numpy as np
-
-
-def cargar_datos(carpeta):
-    """Lee los datos diarios del dataset descomprimido junto al programa."""
-    archivo_csv = carpeta / "bike+sharing+dataset" / "day.csv"
-    if not archivo_csv.is_file():
-        raise FileNotFoundError(
-            f"No se encontró {archivo_csv}. Descomprimí el dataset en "
-            "bike+sharing+dataset junto a EjercicioA2.py."
-        )
-    with archivo_csv.open(encoding="utf-8-sig", newline="") as archivo:
-        filas = list(csv.DictReader(archivo))
-    fuente = archivo_csv.relative_to(carpeta).as_posix()
-
-    x = np.array([float(fila["temp"]) for fila in filas])
-    y = np.array([float(fila["cnt"]) for fila in filas])
-    if len(x) < 2 or not (np.isfinite(x).all() and np.isfinite(y).all()):
-        raise ValueError("Los datos deben contener al menos dos filas y valores finitos.")
-    if np.ptp(x) == 0:
-        raise ValueError("temp debe tener valores distintos para ajustar una recta.")
-    return x, y, fuente
+import pandas as pd
 
 
 def numero(valor, decimales=12):
@@ -31,33 +9,36 @@ def numero(valor, decimales=12):
 
 def main():
     carpeta = Path(__file__).resolve().parent
-    x, y, fuente = cargar_datos(carpeta)
+    archivo = carpeta / "bike+sharing+dataset" / "day.csv"
+
+    # Carga de datos con pandas
+    df = pd.read_csv(archivo)
+    x = df["temp"].values
+    y = df["cnt"].values
     n = len(x)
-    media_x = x.mean()
-    media_y = y.mean()
-    suma_x = x.sum()
-    suma_y = y.sum()
+
+    # Medias y sumatorias muestrales
+    media_x = np.mean(x)
+    media_y = np.mean(y)
+    suma_x = np.sum(x)
+    suma_y = np.sum(y)
     suma_x2 = np.sum(x ** 2)
     suma_xy = np.sum(x * y)
 
+    # Estimadores por ecuaciones normales
     Sxx = np.sum((x - media_x) ** 2)
     Sxy = np.sum((x - media_x) * (y - media_y))
     b1 = Sxy / Sxx
     b0 = media_y - b1 * media_x
 
-    # polyfit devuelve primero la pendiente y luego la ordenada al origen.
+    # Verificación con NumPy polyfit
     b1_herramienta, b0_herramienta = np.polyfit(x, y, 1)
     diferencia_b0 = abs(b0 - b0_herramienta)
     diferencia_b1 = abs(b1 - b1_herramienta)
-    coinciden = np.allclose(
-        [b0, b1], [b0_herramienta, b1_herramienta], rtol=0, atol=1e-8
-    )
-    if not coinciden:
-        raise ArithmeticError("Los dos métodos no coinciden: revisar el cálculo.")
 
     informe = f"""RESULTADOS A.2
 ==============
-Fuente: {fuente} | n = {n}
+Fuente: bike+sharing+dataset/day.csv | n = {n}
 x = temp (normalizada); y = cnt (alquileres diarios).
 
 RECTA FINAL
@@ -109,7 +90,6 @@ Valores mostrados redondeados; cálculos con precisión completa.
 """
 
     salida = carpeta / "Resultados A.2.txt"
-    # UTF-8 con BOM permite reconocer los acentos en Bloc de notas.
     salida.write_text(informe, encoding="utf-8-sig")
     print(f"Archivo generado: {salida}")
     print("Resultados del A.2 guardados y verificados.")

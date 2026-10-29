@@ -1,6 +1,5 @@
 """Resuelve A.3 y guarda un TXT de resultados y el gráfico solicitado."""
 
-import csv
 from pathlib import Path
 
 import matplotlib
@@ -8,6 +7,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 
 VARIABLES = ("temp", "atemp", "hum", "windspeed")
@@ -19,16 +19,9 @@ FACTOR_DIVERGENCIA = 100
 
 def cargar_datos(carpeta):
     archivo = carpeta / "bike+sharing+dataset" / "day.csv"
-    with archivo.open(encoding="utf-8-sig", newline="") as entrada:
-        filas = list(csv.DictReader(entrada))
-    X = np.array([[1.0] + [float(fila[v]) for v in VARIABLES] for fila in filas])
-    y = np.array([float(fila["cnt"]) for fila in filas])
-    if X.ndim != 2 or len(y) <= X.shape[1]:
-        raise ValueError("Se necesitan más observaciones que parámetros.")
-    if not (np.isfinite(X).all() and np.isfinite(y).all()):
-        raise ValueError("Los datos deben ser numéricos y finitos.")
-    if np.linalg.matrix_rank(X) < X.shape[1]:
-        raise ValueError("Las columnas del modelo deben ser independientes.")
+    df = pd.read_csv(archivo)
+    X = np.column_stack([np.ones(len(df))] + [df[v].values for v in VARIABLES])
+    y = df["cnt"].values
     return X, y
 
 
@@ -45,7 +38,6 @@ def descenso_gradiente(X, y, H, c, alpha):
     estado = "Máximo de iteraciones"
 
     for _ in range(MAX_ITERACIONES):
-        # Es la misma derivada 2*X.T@(X@b-y), precomputada para ahorrar trabajo.
         gradiente = H @ b - c
         if np.linalg.norm(gradiente) <= TOLERANCIA_GRADIENTE:
             estado = "Convergió"
@@ -56,7 +48,6 @@ def descenso_gradiente(X, y, H, c, alpha):
             estado = "Divergió"
             break
 
-    # Se evalúa también el último punto, incluso si se alcanzó el máximo.
     norma_gradiente = float(np.linalg.norm(2 * X.T @ (X @ b - y)))
     if estado != "Divergió" and norma_gradiente <= TOLERANCIA_GRADIENTE:
         estado = "Convergió"
@@ -80,7 +71,6 @@ def graficar(resultados, f_minimo, archivo):
         fig, ax = plt.subplots(figsize=(11, 6.5), layout="constrained")
         for nombre, resultado in resultados.items():
             valores = resultado["historial"]
-            # Conserva el comienzo y muestrea el resto para aligerar el gráfico.
             indices = np.unique(np.concatenate((
                 np.arange(min(len(valores), 101)),
                 np.linspace(0, len(valores) - 1, min(len(valores), 2000), dtype=int),
@@ -108,8 +98,6 @@ def main():
     H = 2 * X.T @ X
     c = 2 * X.T @ y
 
-    # Solución de referencia del modelo de B.5, independiente de A.1 y A.2.
-    # Resuelve las ecuaciones normales sin calcular la inversa explícitamente.
     b_exacto = np.linalg.solve(H, c)
     b_lstsq = np.linalg.lstsq(X, y, rcond=None)[0]
     if not np.allclose(b_exacto, b_lstsq, rtol=0, atol=1e-6):

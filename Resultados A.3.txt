@@ -44,7 +44,7 @@ POR QUÉ SE RESTA EL GRADIENTE (2 líneas)
 
 CRITERIO DE PARADA
   Convergencia: norma euclídea del gradiente <= 1e-05.
-  Norma final con tasa adecuada: 9.999e-06.
+  Norma final con tasa adecuada: 1.000e-05.
   Límite: 150000 iteraciones; alcanzarlo no significa convergencia.
   Divergencia: detener si f > 100*f_inicial o deja de ser finito.
 

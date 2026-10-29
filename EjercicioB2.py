@@ -26,7 +26,7 @@ ALFA = 0.05          # intervalos al 95 %
 
 def cargar_datos():
     """Lee data/day.csv si existe junto al script; si no, lo baja de la URL."""
-    local = Path(__file__).resolve().parent / "data" / "day.csv"
+    local = Path(__file__).resolve().parent / "bike+sharing+dataset" / "day.csv"
     try:
         return pd.read_csv(local if local.exists() else URL)
     except Exception as e:
