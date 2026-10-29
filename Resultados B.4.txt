@@ -1,0 +1,22 @@
+RESULTADOS B.4 · INTERVALOS PARA LA RESPUESTA MEDIA Y DE PREDICCIÓN
+==================================================================
+Nota sobre la reproducibilidad del ejercicio:
+Los intervalos de confianza del 95 % para la respuesta media e individual 
+evaluados en x* = 0,65 (escala normalizada, aprox. 26,7 °C) para la variable 
+"temp" fueron calculados dentro del análisis de regresión lineal simple 
+en el script "EjercicioB2.py".
+
+Para reproducir los valores numéricos:
+Ejecutar: py EjercicioB2.py
+Consultar las columnas "ICM(Y|x*)" e "IP(Y|x*)" de la fila "temp" en "Resultados B.2.txt".
+
+VALORES CALCULADOS PARA EL MODELO SOBRE temp (n = 731):
+  Ecuación de la recta : cnt_estimado = 1214,6421 + 6640,7100 * temp
+  Estimación puntual   : y_hat* = 1214,6421 + 6640,7100 * 0,65 = 5531,10 bicicletas
+  ICM(Y | x* = 0,65)   : [5387,60 ; 5674,61] bicicletas
+  IP(Y | x* = 0,65)    : [2564,36 ; 8497,84] bicicletas
+
+El desarrollo algebraico paso a paso, el cálculo de los errores estándar 
+y la explicación conceptual de las diferencias de amplitud se encuentran 
+redactados en la sección B.4 del informe.
+==================================================================
