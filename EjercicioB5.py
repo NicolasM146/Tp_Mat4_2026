@@ -48,8 +48,9 @@ def ajuste_por_formulas(X, y):
         raise ValueError("La variable respuesta debe tener variabilidad.")
     r2 = 1 - sce / stc
 
-    # Se informan ambas fórmulas porque el PDF usa (n-k) en el numerador.
-    # En ambas, k cuenta solo los predictores: 4 en múltiple, 1 en simple.
+    # Se calculan ambas fórmulas porque el PDF usa (n-k) en el numerador.
+    # Solo se presenta el ajuste del múltiple; del simple se compara el R² de B.2.
+    # En ambas, k cuenta solo los predictores, sin el intercepto.
     r2_aj_consigna = 1 - (1 - r2) * (n - k) / (n - k - 1)
     r2_aj_habitual = 1 - (1 - r2) * (n - 1) / (n - k - 1)
 
@@ -122,17 +123,18 @@ def main():
         f"  {etiqueta:<17}{numero(valor, 6):>17}{numero(valor_sm, 6):>17}{dif:>15.2e}"
         for etiqueta, valor, valor_sm, dif in zip(etiquetas, b, herramienta["b"], diferencia)
     )
-    comparacion = "\n".join(
-        f"  {nombre:<22}{numero(a['r2']):>12}"
-        f"{numero(a['r2_aj_consigna']):>20}{numero(a['r2_aj_habitual']):>20}"
-        for nombre, a in ((f"Simple ({mejor})", simple), ("Múltiple", multiple))
-    )
+    comparacion = "\n".join((
+        f"  {f'Simple ({mejor})':<22}{numero(simple['r2']):>12}{'-':>20}",
+        f"  {'Múltiple':<22}{numero(multiple['r2']):>12}"
+        f"{numero(multiple['r2_aj_consigna']):>20}",
+    ))
     matriz = "\n".join(
         "  [" + "  ".join(f"{numero(v, 6):>13}" for v in fila) + "]"
         for fila in multiple["xtx"]
     )
     vector = "\n".join(f"  [{numero(v, 6):>20}]" for v in multiple["xty"])
-    mejora = multiple["r2_aj_consigna"] > simple["r2_aj_consigna"]
+    # La comparación solicitada usa R² ajustado del múltiple y R² simple de B.2.
+    mejora = multiple["r2_aj_consigna"] > simple["r2"]
     conclusion = "supera" if mejora else "no supera"
 
     informe = f"""RESULTADOS B.5 - REGRESIÓN MÚLTIPLE
@@ -151,20 +153,24 @@ MODELO FINAL
                 {numero(b[4], 4)}*windspeed
 
 COMPARACIÓN CON EL MEJOR MODELO SIMPLE DEL B.2
-  Modelo                          R2    R2 aj. consigna     R2 aj. habitual
+  Modelo                          R2    R2 aj. consigna
 {comparacion}
   Mejor simple: {mejor}, elegido por el mayor R2 entre las cuatro variables.
   Recta simple: cnt_estimado = {numero(simple['b'][0], 4)} + {numero(simple['b'][1], 4)}*{mejor}
 
   El modelo múltiple explica el {numero(100 * multiple['r2'], 2)}% de la variabilidad observada,
-  frente al {numero(100 * simple['r2'], 2)}% del modelo simple. También {conclusion} su R2 ajustado.
+  frente al {numero(100 * simple['r2'], 2)}% del modelo simple.
+  El R2 ajustado del múltiple ({numero(multiple['r2_aj_consigna'])}) {conclusion}
+  el R2 sin ajustar del simple ({numero(simple['r2'])}), tomado de B.2.
   La comparación describe el ajuste a estos datos; no evalúa predicciones futuras.
 
 FÓRMULAS DE R2 AJUSTADO
   Consigna: R2_aj = 1 - (1-R2)*(n-k)/(n-k-1).
   Habitual: R2_aj = 1 - (1-R2)*(n-1)/(n-k-1).
-  k = número de predictores: 4 en el múltiple y 1 en el simple.
-  El PDF usa n-k donde la fórmula habitual usa n-1; se informan ambas.
+  k = número de predictores: 4 en el modelo múltiple.
+  En esta comparación, del modelo simple se usa su R2 sin ajustar.
+  El guion indica que el R2 ajustado del simple no se presenta aquí.
+  El PDF usa n-k donde la fórmula habitual usa n-1; ambas se verifican para el múltiple.
   Para seguir literalmente la consigna, usar la columna "R2 aj. consigna".
 
 RESOLUCIÓN MATRICIAL
@@ -223,20 +229,20 @@ R² = 1 - SCE/STC = {numero(multiple['r2'])}.
 
 Comparación con el modelo simple de B.2
 
-En B.2 se seleccionó {mejor}, con el modelo cnt_estimado = {numero(simple['b'][0], 4)} + {numero(simple['b'][1], 4)}·{mejor}. Para comparar se aplicó literalmente la fórmula de R² ajustado del enunciado:
+En B.2 se seleccionó {mejor}, con el modelo cnt_estimado = {numero(simple['b'][0], 4)} + {numero(simple['b'][1], 4)}·{mejor} y R² = {numero(simple['r2'])}. Se compara este R² sin ajustar con el R² ajustado del modelo múltiple, calculado con la fórmula del enunciado:
 
 R² ajustado = 1 - (1 - R²)·(n - k)/(n - k - 1).
 
-Aquí n = {n} y k es el número de variables explicativas, sin contar el intercepto. Para el modelo simple k = 1 y para el múltiple k = 4.
+Para el modelo múltiple, n = {n} y k = 4 variables explicativas, sin contar el intercepto.
 
-Simple ({mejor}): R² = {numero(simple['r2'])}; R² ajustado según consigna = {numero(simple['r2_aj_consigna'])}.
+Simple ({mejor}): R² = {numero(simple['r2'])}; R² ajustado = - (no se utiliza en esta comparación).
 Múltiple: R² = {numero(multiple['r2'])}; R² ajustado según consigna = {numero(multiple['r2_aj_consigna'])}.
 
 Conclusión
 
-El modelo múltiple explica el {numero(100 * multiple['r2'], 2)}% de la variabilidad observada, frente al {numero(100 * simple['r2'], 2)}% del modelo simple, una diferencia de {numero(100 * (multiple['r2'] - simple['r2']), 2)} puntos porcentuales. También {conclusion} su R² ajustado. Por lo tanto, incluir conjuntamente las cuatro variables mejora el ajuste a estos datos. Esto no implica causalidad ni garantiza una mejora predictiva en días nuevos.
+El modelo múltiple explica el {numero(100 * multiple['r2'], 2)}% de la variabilidad observada, frente al {numero(100 * simple['r2'], 2)}% del modelo simple, una diferencia de {numero(100 * (multiple['r2'] - simple['r2']), 2)} puntos porcentuales. Su R² ajustado ({numero(multiple['r2_aj_consigna'])}) también {conclusion} el R² sin ajustar del modelo simple ({numero(simple['r2'])}). Por lo tanto, la comparación favorece al modelo múltiple para estos datos. Esto no implica causalidad ni garantiza una mejora predictiva en días nuevos.
 
-Nota sobre R² ajustado: la fórmula estándar utiliza n-1 en el numerador, en lugar de n-k. Con ella se obtiene {numero(multiple['r2_aj_habitual'])} para el múltiple y {numero(simple['r2_aj_habitual'])} para el simple. Estos valores coinciden con rsquared_adj de statsmodels y la conclusión se mantiene. Los resultados anteriores se identifican como "según consigna" para distinguir ambas fórmulas.
+Nota sobre R² ajustado: la fórmula estándar utiliza n-1 en el numerador, en lugar de n-k. Con ella se obtiene {numero(multiple['r2_aj_habitual'])} para el múltiple, valor que coincide con rsquared_adj de statsmodels y sigue siendo mayor que el R² sin ajustar del simple ({numero(simple['r2'])}). El resultado {numero(multiple['r2_aj_consigna'])} se identifica como "según consigna" para distinguir ambas fórmulas.
 """
     salida = carpeta / "Resultados B.5.txt"
     salida.write_text(informe, encoding="utf-8-sig")

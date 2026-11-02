@@ -18,21 +18,25 @@ MODELO FINAL
                 -4528,6748*windspeed
 
 COMPARACIÓN CON EL MEJOR MODELO SIMPLE DEL B.2
-  Modelo                          R2    R2 aj. consigna     R2 aj. habitual
-  Simple (atemp)            0,398244            0,397418            0,397418
-  Múltiple                  0,463832            0,463094            0,460878
+  Modelo                          R2    R2 aj. consigna
+  Simple (atemp)            0,398244                   -
+  Múltiple                  0,463832            0,463094
   Mejor simple: atemp, elegido por el mayor R2 entre las cuatro variables.
   Recta simple: cnt_estimado = 945,8240 + 7501,8339*atemp
 
   El modelo múltiple explica el 46,38% de la variabilidad observada,
-  frente al 39,82% del modelo simple. También supera su R2 ajustado.
+  frente al 39,82% del modelo simple.
+  El R2 ajustado del múltiple (0,463094) supera
+  el R2 sin ajustar del simple (0,398244), tomado de B.2.
   La comparación describe el ajuste a estos datos; no evalúa predicciones futuras.
 
 FÓRMULAS DE R2 AJUSTADO
   Consigna: R2_aj = 1 - (1-R2)*(n-k)/(n-k-1).
   Habitual: R2_aj = 1 - (1-R2)*(n-1)/(n-k-1).
-  k = número de predictores: 4 en el múltiple y 1 en el simple.
-  El PDF usa n-k donde la fórmula habitual usa n-1; se informan ambas.
+  k = número de predictores: 4 en el modelo múltiple.
+  En esta comparación, del modelo simple se usa su R2 sin ajustar.
+  El guion indica que el R2 ajustado del simple no se presenta aquí.
+  El PDF usa n-k donde la fórmula habitual usa n-1; ambas se verifican para el múltiple.
   Para seguir literalmente la consigna, usar la columna "R2 aj. consigna".
 
 RESOLUCIÓN MATRICIAL
