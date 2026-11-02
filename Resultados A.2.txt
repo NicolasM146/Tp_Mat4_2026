@@ -47,5 +47,3 @@ DESPEJE
   Sxx = sum (xi-media_x)^2 = sum xi^2 - n*media_x^2
   Sxy = sum (xi-media_x)*(yi-media_y) = sum xi*yi - n*media_x*media_y
   b1 = Sxy/Sxx; b0 = media_y - b1*media_x.
-
-Valores mostrados redondeados; cálculos con precisión completa.

@@ -1,6 +1,4 @@
-RESULTADOS B.4 · INTERVALOS PARA LA RESPUESTA MEDIA Y DE PREDICCIÓN
 ==================================================================
-Nota sobre la reproducibilidad del ejercicio:
 Los estimadores puntuales, sumatorias (Sxx, Sxy, SCE) y la varianza residual 
 para la variable "temp" provienen del análisis de regresión lineal simple 
 generado por "EjercicioB2.py".
