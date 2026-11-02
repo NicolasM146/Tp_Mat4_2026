@@ -1,22 +1,31 @@
 RESULTADOS B.4 · INTERVALOS PARA LA RESPUESTA MEDIA Y DE PREDICCIÓN
 ==================================================================
 Nota sobre la reproducibilidad del ejercicio:
-Los intervalos de confianza del 95 % para la respuesta media e individual 
-evaluados en x* = 0,65 (escala normalizada, aprox. 26,7 °C) para la variable 
-"temp" fueron calculados dentro del análisis de regresión lineal simple 
-en el script "EjercicioB2.py".
+Los estimadores puntuales, sumatorias (Sxx, Sxy, SCE) y la varianza residual 
+para la variable "temp" provienen del análisis de regresión lineal simple 
+generado por "EjercicioB2.py".
 
-Para reproducir los valores numéricos:
-Ejecutar: py EjercicioB2.py
-Consultar las columnas "ICM(Y|x*)" e "IP(Y|x*)" de la fila "temp" en "Resultados B.2.txt".
-
-VALORES CALCULADOS PARA EL MODELO SOBRE temp (n = 731):
+VALORES CALCULADOS PARA EL MODELO SOBRE temp (n = 731, gl = 729):
   Ecuación de la recta : cnt_estimado = 1214,6421 + 6640,7100 * temp
   Estimación puntual   : y_hat* = 1214,6421 + 6640,7100 * 0,65 = 5531,10 bicicletas
-  ICM(Y | x* = 0,65)   : [5387,60 ; 5674,61] bicicletas
-  IP(Y | x* = 0,65)    : [2564,36 ; 8497,84] bicicletas
+  Error estándar ICM   : EE_media = 73,0973 bicicletas
+  Error estándar IP    : EE_pred  = 1511,1574 bicicletas
 
-El desarrollo algebraico paso a paso, el cálculo de los errores estándar 
+CRITERIO DEL VALOR CRÍTICO (UNIFICACIÓN CON B.3):
+Para el nivel de confianza del 95 % (alfa = 0,05) y 729 grados de libertad:
+  - Valor de tabla t de Student (fila infinito / normal z_0.025) : t = 1,960
+  - Valor exacto por software (scipy.stats.t.ppf)                 : t = 1,9632
+
+Siguiendo el criterio adoptado por la cátedra y unificado con el ejercicio B.3, 
+en el informe se utiliza el valor crítico de tabla t = 1,960:
+
+  ICM(Y | x* = 0,65) [t = 1,960] : [5387,83 ; 5674,37] bicicletas
+  IP(Y | x* = 0,65)  [t = 1,960] : [2569,24 ; 8492,97] bicicletas
+
+(Referencia calculada por software con t = 1,9632 de EjercicioB2.py:
+ ICM: [5387,60 ; 5674,61] | IP: [2564,36 ; 8497,84]).
+
+El desarrollo algebraico paso a paso, la sustitución numérica de las fórmulas 
 y la explicación conceptual de las diferencias de amplitud se encuentran 
 redactados en la sección B.4 del informe.
 ==================================================================
