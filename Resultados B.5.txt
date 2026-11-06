@@ -2,7 +2,7 @@
 ==================================
 Fuente: bike+sharing+dataset/day.csv | n = 731 días.
 Respuesta: cnt. Predictores: temp, atemp, hum y windspeed normalizados.
-
+ 
 COEFICIENTES: FÓRMULAS Y HERRAMIENTA, COMO EN B.2
   Parámetro                 Fórmulas      statsmodels     Diferencia
   b0 (intercepto)        3860,368453      3860,368453       9.55e-11
@@ -11,25 +11,25 @@ COEFICIENTES: FÓRMULAS Y HERRAMIENTA, COMO EN B.2
   b3 (hum)              -3149,109752     -3149,109752       1.82e-12
   b4 (windspeed)        -4528,674829     -4528,674829       1.39e-10
   ¿Coinciden las dos vías? Sí (diferencia absoluta menor que 1e-6).
-
+ 
 MODELO FINAL
   cnt_estimado = 3860,3685 + 2111,8136*temp
                 + 5139,1524*atemp -3149,1098*hum
                 -4528,6748*windspeed
-
+ 
 COMPARACIÓN CON EL MEJOR MODELO SIMPLE DEL B.2
   Modelo                          R2    R2 aj. consigna
   Simple (atemp)            0,398244                   -
   Múltiple                  0,463832            0,463094
   Mejor simple: atemp, elegido por el mayor R2 entre las cuatro variables.
   Recta simple: cnt_estimado = 945,8240 + 7501,8339*atemp
-
+ 
   El modelo múltiple explica el 46,38% de la variabilidad observada,
   frente al 39,82% del modelo simple.
   El R2 ajustado del múltiple (0,463094) supera
   el R2 sin ajustar del simple (0,398244), tomado de B.2.
   La comparación describe el ajuste a estos datos; no evalúa predicciones futuras.
-
+ 
 FÓRMULAS DE R2 AJUSTADO
   Consigna: R2_aj = 1 - (1-R2)*(n-k)/(n-k-1).
   Habitual: R2_aj = 1 - (1-R2)*(n-1)/(n-k-1).
@@ -38,12 +38,12 @@ FÓRMULAS DE R2 AJUSTADO
   El guion indica que el R2 ajustado del simple no se presenta aquí.
   El PDF usa n-k donde la fórmula habitual usa n-1; ambas se verifican para el múltiple.
   Para seguir literalmente la consigna, usar la columna "R2 aj. consigna".
-
+ 
 RESOLUCIÓN MATRICIAL
   X tiene columnas [1, temp, atemp, hum, windspeed] y dimensión 731 x 5.
   Se resuelve (X^T*X)*b = X^T*y con numpy.linalg.solve.
   Equivale a b = (X^T*X)^(-1)*X^T*y, sin calcular la inversa explícitamente.
-
+ 
   X^T*X =
   [   731,000000     362,126280     346,752766     458,990560     139,245421]
   [   362,126280     203,852448     193,371389     229,793352      67,344422]
@@ -56,7 +56,7 @@ RESOLUCIÓN MATRICIAL
   [      1707326,962662]
   [      2047179,133846]
   [       601505,053933]
-
+ 
 VERIFICACIÓN
   Mayor diferencia de coeficientes frente a statsmodels: 2.11e-09.
   SCR múltiple = 1270684490,589651

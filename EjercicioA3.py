@@ -16,13 +16,19 @@ MAX_ITERACIONES = 150_000
 TOLERANCIA_GRADIENTE = 1e-5
 FACTOR_DIVERGENCIA = 100
 
+URL = (
+    "https://raw.githubusercontent.com/danwild/bike-share-prediction/"
+    "master/Bike-Sharing-Dataset/day.csv"
+)
 
 def cargar_datos(carpeta):
-    archivo = carpeta / "bike+sharing+dataset" / "day.csv"
-    df = pd.read_csv(archivo)
-    X = np.column_stack([np.ones(len(df))] + [df[v].values for v in VARIABLES])
-    y = df["cnt"].values
-    return X, y
+    """Lee bike+sharing+dataset/day.csv junto al script; si no está, usa la URL."""
+    local = carpeta / "bike+sharing+dataset" / "day.csv"
+    try:
+        return pd.read_csv(local if local.exists() else URL)
+    except Exception as e:
+        print(f"Error al cargar los datos: {e}")
+        raise SystemExit(1)
 
 
 def costo(X, y, b):
@@ -94,7 +100,9 @@ def graficar(resultados, f_minimo, archivo):
 
 def main():
     carpeta = Path(__file__).resolve().parent
-    X, y = cargar_datos(carpeta)
+    df =cargar_datos(carpeta)
+    X = np.column_stack([np.ones(len(df))] + [df[v].values for v in VARIABLES])
+    y = df["cnt"].values
     H = 2 * X.T @ X
     c = 2 * X.T @ y
 

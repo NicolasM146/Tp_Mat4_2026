@@ -2,6 +2,19 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+URL = (
+    "https://raw.githubusercontent.com/danwild/bike-share-prediction/"
+    "master/Bike-Sharing-Dataset/day.csv"
+)
+
+def cargar_datos(carpeta):
+    """Lee bike+sharing+dataset/day.csv junto al script; si no está, usa la URL."""
+    local = carpeta / "bike+sharing+dataset" / "day.csv"
+    try:
+        return pd.read_csv(local if local.exists() else URL)
+    except Exception as e:
+        print(f"Error al cargar los datos: {e}")
+        raise SystemExit(1)
 
 def numero(valor, decimales=4):
     """Formatea un número flotante usando coma como separador decimal."""
@@ -11,14 +24,7 @@ def numero(valor, decimales=4):
 def main():
     # Define la carpeta actual y la ruta relativa al archivo dentro del repositorio
     carpeta = Path(__file__).resolve().parent
-    archivo = carpeta / "bike+sharing+dataset" / "day.csv"
-
-    # 1. Cargar datos desde el archivo local de la carpeta
-    try:
-        df = pd.read_csv(archivo)
-    except FileNotFoundError:
-        print(f"Error: No se encontró el archivo en la ruta {archivo}")
-        return
+    df = cargar_datos(carpeta)
 
     # Variables del modelo B.1
     x = df["temp"].values

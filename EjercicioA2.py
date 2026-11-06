@@ -2,6 +2,20 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+URL = (
+    "https://raw.githubusercontent.com/danwild/bike-share-prediction/"
+    "master/Bike-Sharing-Dataset/day.csv"
+)
+
+def cargar_datos(carpeta):
+    """Lee bike+sharing+dataset/day.csv junto al script; si no está, usa la URL."""
+    local = carpeta / "bike+sharing+dataset" / "day.csv"
+    try:
+        return pd.read_csv(local if local.exists() else URL)
+    except Exception as e:
+        print(f"Error al cargar los datos: {e}")
+        raise SystemExit(1)
+
 
 def numero(valor, decimales=12):
     return f"{valor:.{decimales}f}".replace(".", ",")
@@ -9,10 +23,8 @@ def numero(valor, decimales=12):
 
 def main():
     carpeta = Path(__file__).resolve().parent
-    archivo = carpeta / "bike+sharing+dataset" / "day.csv"
-
     # Carga de datos con pandas
-    df = pd.read_csv(archivo)
+    df = cargar_datos(carpeta)
     x = df["temp"].values
     y = df["cnt"].values
     n = len(x)
