@@ -3,6 +3,14 @@
 Fuente: bike+sharing+dataset/day.csv | n = 731 días.
 Modelo simple: cnt en función de temp (cnt = b0 + b1 * temp)
 
+
+
+SUMAS DE CUADRADOS Y PRODUCTOS CRUZADOS
+  Sxx = Σ(x - x̄)^2         = 24,4606
+  Syy = Σ(y - ȳ)^2         = 2739535392,0465
+  Sxy = Σ(x - x̄)(y - ȳ)    = 162435,7313
+
+
 RECTA DE REGRESIÓN AJUSTADA
   b0 (intercepto) = 1214,6421
   b1 (pendiente)  = 6640,7100
