@@ -62,6 +62,14 @@ def main():
 Fuente: bike+sharing+dataset/day.csv | n = {n} días.
 Modelo simple: cnt en función de temp (cnt = b0 + b1 * temp)
 
+
+
+SUMAS DE CUADRADOS Y PRODUCTOS CRUZADOS
+  Sxx = Σ(x - x̄)^2         = {numero(sxx, 4)}
+  Syy = Σ(y - ȳ)^2         = {numero(syy, 4)}
+  Sxy = Σ(x - x̄)(y - ȳ)    = {numero(sxy, 4)}
+
+
 RECTA DE REGRESIÓN AJUSTADA
   b0 (intercepto) = {numero(b0, 4)}
   b1 (pendiente)  = {numero(b1, 4)}
