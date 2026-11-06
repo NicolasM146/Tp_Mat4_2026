@@ -63,7 +63,6 @@ Fuente: bike+sharing+dataset/day.csv | n = {n} días.
 Modelo simple: cnt en función de temp (cnt = b0 + b1 * temp)
 
 
-
 SUMAS DE CUADRADOS Y PRODUCTOS CRUZADOS
   Sxx = Σ(x - x̄)^2         = {numero(sxx, 4)}
   Syy = Σ(y - ȳ)^2         = {numero(syy, 4)}
@@ -87,7 +86,7 @@ VERIFICACIÓN NUMÉRICA
   SCR + SCE = {numero(scr, 2)} + {numero(sce, 2)}
             = {numero(scr + sce, 2)}
   STC       = {numero(stc, 2)}
-  ¿Coinciden exactamente?: {"Sí" if np.isclose(scr + sce, stc) else "No"}
+  ¿Coinciden?: {"Sí" if np.isclose(scr + sce, stc) else "No"}
 
 ESTIMACIÓN DE LA VARIANZA DEL MODELO (sigma^2)
   gl = n - 2 = {n} - 2 = {gl_err}
@@ -104,13 +103,13 @@ INTERPRETACIÓN DE R^2
     no explicada (otros factores como lluvia, humedad, si es laboral/feriado o azar).
 
   - Qué NO significa:
-    1. No implica Causalidad: Una asociación estadística del {numero(r2 * 100, 2)}% no prueba
+    1. La relacion no es lineal: Una asociación estadística del {numero(r2 * 100, 2)}% no prueba
        que la temperatura sea la causa directa del alquiler. Si fuera causa-efecto pura, a mayor
        temperatura siempre habría más alquileres, lo cual no ocurre con calor extremo.
     2. No demuestra linealidad óptima: Mide la fuerza de una relación lineal, pero no descarta
        que una estructura no lineal (ej. cuadrática) ajuste mejor al fenómeno.
     3. No indica que el modelo sea inadecuado: Explicar casi un 40% de la demanda urbana con una sola
-       variable representa un nivel de explicación significativo.
+       variable representa un nivel de explicación considerable.
 """
 
     salida = carpeta / "Resultados B.1.txt"
